@@ -41,18 +41,15 @@
         <div class="column1">
           <p>Spring <strong>5.x</strong> - Date : <strong>Août 2018</strong></p>
 <h1 id="qu-est-ce-que-spring-">Qu&#39;est-ce que Spring ?</h1>
-<p>Aide à la construction d&#39;applications Java d&#39;entreprise :</p>
 <ul>
 <li><strong>Open source</strong> (Licence Apache 2, sources sur <a href="https://github.com/spring-projects/spring-framework">github</a>)</li>
 <li><strong>Léger</strong><ul>
 <li>N&#39;oblige pas d&#39;utiliser un serveur applicatif</li>
-<li>N&#39;est pas invasif (n&#39;oblige pas étendre des classes de Spring)</li>
-<li>JARs légers</li>
+<li>N&#39;est pas invasif</li>
 </ul>
 </li>
 <li><strong>Conteneur</strong><ul>
 <li>Les objets de l&#39;application n&#39;ont pas besoin de chercher à se connecter aux autres</li>
-<li>Instancie et injecte les objets dont l&#39;application a besoin</li>
 <li>Gère le cycle de vie des objets</li>
 </ul>
 </li>
@@ -61,27 +58,89 @@
 </ul>
 </li>
 </ul>
-<p>==&gt; Facilite la configuration et le développement</p>
+<h1 id="d-pendance-minimale">Dépendance minimale</h1>
+<pre><code class="lang-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
 <h1 id="configuration-d-une-appli">Configuration d&#39;une appli</h1>
 <ul>
 <li>Java</li>
 <li>Annotations</li>
 <li>XML (toujours possible mais verbeux)</li>
 </ul>
-<h1 id="injection-de-d-pendances">Injection de dépendances</h1>
-<h1 id="factory-beans">Factory beans</h1>
-<h1 id="spring-container">Spring container</h1>
-<h1 id="tests">Tests</h1>
+<pre><code class="lang-Java">@ComponentScan(&quot;fr.sii.cheatsheet.spring&quot;)
+public class MyApp {
+
+    public static void main(String[] args) {
+        ApplicationContext app = new AnnotationConfigApplicationContext(MyApp.class);
+
+        DummyService helloWorld = app.getBean(DummyService.class);
+        helloWorld.getMessage();
+    }
+}
+</code></pre>
+<p>Préférez l&#39;utilisation d&#39;une classe de configuration</p>
+<pre><code class="lang-Java">@Configuration
+public class MyAppConfig {
+  // @Bean, ...
+}
+</code></pre>
 
         </div>
         <div class="column2">
-          <h1 id="column-2">Column 2</h1>
-<p>an exemple</p>
-<pre><code class="lang-Java">public class Test extends AbstractTest implements ITest {
-
-  public Test() {
-    System.out.println(&quot;Un test&quot;);
+          <h1 id="injection-de-d-pendances">Injection de dépendances</h1>
+<ul>
+<li>Définir un bean : <strong>@Component</strong> ou <strong>@Bean</strong><ul>
+<li>Spécialisations <em>@Component</em> : <strong>@Service</strong>, <strong>@Repository</strong> et <strong>@Controller</strong></li>
+</ul>
+</li>
+<li>Récupérer un bean défini par <strong>injection de dépendance</strong> : <strong>@Autowired</strong><ul>
+<li>Via une propriété de classe</li>
+<li>Via un setter</li>
+<li>Via le constructeur <em>(à préférer pour faciliter de test)</em></li>
+</ul>
+</li>
+</ul>
+<pre><code class="lang-Java">```Java
+@Configuration
+public class MyAppConfig {
+  @Bean
+  public DummyService dummyService(){
+    return new DummyServiceImpl();
   }
+}
+// OU
+@Component
+public class DummyService {
+}
+
+@Component
+public class FooService {
+
+  @Autowired
+  private DummyService service;
+
+    public String myFooCall() {
+        return service.myDummyServiceCall();
+    }
+}
+</code></pre>
+<h1 id="les-propri-t-s">Les propriétés</h1>
+<ul>
+<li>Déclarer le fichier : <strong>@PropertySource(&quot;classpath:foo.properties&quot;)</strong> </li>
+<li>Utiliser une propriété : <strong>@Value(&quot;${message}&quot;)</strong> </li>
+</ul>
+<pre><code class="lang-Java">@Configuration
+@PropertySource(&quot;classpath:foo.properties&quot;)
+public class MyAppConfig {
+}
+
+@Component
+public class MyServiceImpl implements MyService {
+  @Value(&quot;${message:Message par défaut}&quot;)
+  private String message;
 }
 </code></pre>
 
@@ -92,7 +151,7 @@
   <a href="https://groupe-sii.github.io/cheat-sheets">groupe-sii.github.io/cheat-sheets</a>
   <a href="http://www.groupe-sii.com">www.groupe-sii.com</a>
   <a href="https://blog.groupe-sii.com">blog.groupe-sii.com</a>
-  <img src="../assets/images/logoSII-white.svg">
+  <img src="../../assets/images/logoSII-white.svg">
 </footer>
 
 
@@ -116,15 +175,9 @@
 
       <main>
         <div class="column1">
-          <h1 id="column-1">Column 1</h1>
-<p>an exemple</p>
-<pre><code class="lang-Java">public class Test extends AbstractTest implements ITest {
-
-  public Test() {
-    System.out.println(&quot;Un test&quot;);
-  }
-}
-</code></pre>
+          <h1 id="factory-beans">Factory beans</h1>
+<h1 id="spring-container">Spring container</h1>
+<h1 id="tests">Tests</h1>
 
         </div>
         <div class="column2">
@@ -140,6 +193,8 @@
 <h1 id="pour-aller-plus-loin">Pour aller plus loin</h1>
 <ul>
 <li><a href="https://spring.io/guides">https://spring.io/guides</a></li>
+<li><a href="https://spring.io/projects/spring-framework">https://spring.io/projects/spring-framework</a></li>
+<li><a href="../spring-boot/index.html">Spring Boot sheet cheat</a></li>
 </ul>
 
         </div>
@@ -149,7 +204,7 @@
   <a href="https://groupe-sii.github.io/cheat-sheets">groupe-sii.github.io/cheat-sheets</a>
   <a href="http://www.groupe-sii.com">www.groupe-sii.com</a>
   <a href="https://blog.groupe-sii.com">blog.groupe-sii.com</a>
-  <img src="../assets/images/logoSII-white.svg">
+  <img src="../../assets/images/logoSII-white.svg">
 </footer>
 
     </div>
