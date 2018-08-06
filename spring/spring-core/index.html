@@ -91,57 +91,45 @@ public class MyAppConfig {
         </div>
         <div class="column2">
           <h1 id="injection-de-d-pendances">Injection de dépendances</h1>
-<ul>
-<li>Définir un bean : <strong>@Component</strong> ou <strong>@Bean</strong><ul>
-<li>Spécialisations <em>@Component</em> : <strong>@Service</strong>, <strong>@Repository</strong> et <strong>@Controller</strong></li>
-</ul>
-</li>
-<li>Récupérer un bean défini par <strong>injection de dépendance</strong> : <strong>@Autowired</strong><ul>
-<li>Via une propriété de classe</li>
-<li>Via un setter</li>
-<li>Via le constructeur <em>(à préférer pour faciliter de test)</em></li>
-</ul>
-</li>
-</ul>
-<pre><code class="lang-Java">```Java
-@Configuration
+<h2 id="d-finir-un-bean-bean">Définir un bean : <strong>@Bean</strong></h2>
+<pre><code class="lang-Java">@Configuration
 public class MyAppConfig {
   @Bean
   public DummyService dummyService(){
     return new DummyServiceImpl();
   }
 }
-// OU
-@Component
-public class DummyService {
+</code></pre>
+<h2 id="d-finir-un-bean-component">Définir un bean : <strong>@Component</strong></h2>
+<p>Spécialisations <em>@Component</em> : <strong>@Service</strong>, <strong>@Repository</strong> et <strong>@Controller</strong></p>
+<pre><code class="lang-Java">@Component
+public class DummyServiceImpl {
 }
-
-@Component
-public class FooService {
+</code></pre>
+<h2 id="injection-de-d-pendance-autowired">Injection de dépendance : <strong>@Autowired</strong></h2>
+<ul>
+<li>Via une propriété de classe</li>
+<li>Via un setter</li>
+<li>Via le constructeur <em>(à préférer pour faciliter de test)</em></li>
+</ul>
+<pre><code class="lang-Java">@Component
+public class FooServiceImpl {
 
   @Autowired
   private DummyService service;
 
-    public String myFooCall() {
-        return service.myDummyServiceCall();
-    }
 }
 </code></pre>
 <h1 id="les-propri-t-s">Les propriétés</h1>
-<ul>
-<li>Déclarer le fichier : <strong>@PropertySource(&quot;classpath:foo.properties&quot;)</strong> </li>
-<li>Utiliser une propriété : <strong>@Value(&quot;${message}&quot;)</strong> </li>
-</ul>
 <pre><code class="lang-Java">@Configuration
 @PropertySource(&quot;classpath:foo.properties&quot;)
 public class MyAppConfig {
+  // Fichier &#39;foo.properties&#39; chargé par Spring
 }
-
-@Component
-public class MyServiceImpl implements MyService {
-  @Value(&quot;${message:Message par défaut}&quot;)
-  private String message;
-}
+</code></pre>
+<p>Utiliser une propriété : <strong>@Value(&quot;${message}&quot;)</strong> </p>
+<pre><code class="lang-Java">@Value(&quot;${message:Message par défaut}&quot;)
+private String message;
 </code></pre>
 
         </div>
@@ -164,10 +152,10 @@ public class MyServiceImpl implements MyService {
       <header class="print-only">
     <div class="header-center">
         <div class="description-content">
-            <div class="title">powercli cheat sheet</div>
+            <div class="title">Spring core cheat sheet</div>
         </div>
         <div class="logo-container">
-          <img src="../../assets/images/spring.png">
+          <img src="../../assets/images/spring-core.png">
         </div>
     </div>
 </header>
@@ -194,7 +182,7 @@ public class MyServiceImpl implements MyService {
 <ul>
 <li><a href="https://spring.io/guides">https://spring.io/guides</a></li>
 <li><a href="https://spring.io/projects/spring-framework">https://spring.io/projects/spring-framework</a></li>
-<li><a href="../spring-boot/index.html">Spring Boot sheet cheat</a></li>
+<li><a href="../spring-boot/index.html">Spring Boot cheat sheet</a></li>
 </ul>
 
         </div>
